@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String               @id @default(uuid())
+  email              String?
+  walletAddress      String               @unique
+  currentBalance     Float                @default(0) // in SOL
+  emailAlertQuota    Int                  @default(200)
+  emailAlertReset    DateTime             @default(dbgenerated("NOW() + INTERVAL '1 day'"))
+  websites           Website[]
+  transactions       Transaction[]
+  notificationConfig NotificationConfig[]
+  alerts             WebsiteAlert[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model Website {
+  id                 String              @id @default(uuid())
+  name               String
+  url                String
+  userId             String
+  user               User                @relation(fields: [userId], references: [id])
+  ticks              WebsiteTick[]
+  status             WebsiteStatus       @default(UNKNOWN)
+  upSince            DateTime?
+  lastCheckedAt      DateTime?
+  checkFrequency     Int                 @default(60)
+  isPaused           Boolean             @default(false)
+  monitoringSince    DateTime            @default(now())
+  uptimePercentage   Float               @default(100)
+  averageResponse    Float?
+  createdAt          DateTime            @default(now())
+  uptimeHistory      UptimeHistory[]
+  preferredRegion    String?
+  notificationConfig NotificationConfig?
+  alerts             WebsiteAlert[]
+}
+
+model Validator {
+  id               String        @id @default(uuid())
+  publicKey        String
+  country          String
+  city             String
+  latitude         Float
+  longitude        Float
+  ip               String
+  region           Region
+  isActive         Boolean       @default(true)
+  pendingPayouts   Int           @default(0)
+  processingPayout Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  ticks            WebsiteTick[]
+  transactions     Transaction[]
+  trustScore       Int           @default(0)
+}
+
+model WebsiteTick {
+  id           String        @id @default(uuid())
+  websiteId    String
+  validatorId  String
+  createdAt    DateTime      @default(now())
+  status       WebsiteStatus
+  region       Region
+  nameLookup   Float? // DNS lookup time
+  connection   Float? // Connection time
+  tlsHandshake Float? // TLS handshake time
+  dataTransfer Float? // Data transfer time
+  ttfb         Float? // Time to first byte
+  total        Float? // Total response time in ms
+  error        String? // Error message if any
+  website      Website       @relation(fields: [websiteId], references: [id])
+  validator    Validator     @relation(fields: [validatorId], references: [id])
+}
+
+model Transaction {
+  id              String            @id @default(uuid())
+  signature       String
+  transactionType TransactionType
+  status          TransactionStatus @default(Pending)
+  retryCount      Int               @default(0)
+  instructionData Json
+  validatorId     String?
+  validator       Validator?        @relation(fields: [validatorId], references: [id])
+  userId          String?
+  user            User?             @relation(fields: [userId], references: [id])
+  amount          BigInt
+  lastCheckedAt   DateTime?
+  createdAt       DateTime          @default(now())
+}
+
+model NotificationConfig {
+  userId                 String
+  websiteId              String   @unique
+  user                   User     @relation(fields: [userId], references: [id])
+  website                Website  @relation(fields: [websiteId], references: [id])
+  email                  String?
+  isHighPingAlertEnabled Boolean  @default(false)
+  isDownAlertEnabled     Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  webhookUrl             String?
+  webhookSecret          String?
+
+  @@id([userId, websiteId])
+}
+
+model UptimeHistory {
+  id               String       @id @default(uuid())
+  websiteId        String
+  website          Website      @relation(fields: [websiteId], references: [id])
+  period           UptimePeriod
+  startDate        DateTime
+  endDate          DateTime
+  uptimePercentage Float
+  averageResponse  Float?
+  totalIncidents   Int          @default(0)
+  totalDowntime    Int          @default(0) // in seconds
+  createdAt        DateTime     @default(now())
+
+  @@unique([websiteId, period, startDate])
+}
+
+model WebsiteAlert {
+  id         String             @id @default(uuid())
+  websiteId  String
+  userId     String
+  user       User               @relation(fields: [userId], references: [id])
+  website    Website            @relation(fields: [websiteId], references: [id])
+  to         String
+  content    String
+  createdAt  DateTime           @default(now())
+  alertType  WebsiteAlertType
+  status     WebsiteAlertStatus @default(PENDING)
+  retryCount Int                @default(0)
+  sentAt     DateTime?
+}
+
+enum WebsiteAlertType {
+  EMAIL
+  WEBHOOK
+}
+
+enum WebsiteAlertStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum WebsiteStatus {
+  ONLINE // Site is up and running normally
+  OFFLINE // Site is down
+  DEGRADED // Site is up but performing poorly
+  UNKNOWN // Status cannot be determined
+}
+
+enum TransactionStatus {
+  Pending
+  Success
+  Failure
+}
+
+enum UptimePeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum Region {
+  US_EAST
+  US_WEST
+  US_CENTRAL
+  CANADA_EAST
+  CANADA_WEST
+  EUROPE_WEST
+  EUROPE_EAST
+  EUROPE_NORTH
+  EUROPE_SOUTH
+  INDIA
+  JAPAN
+  SOUTH_KOREA
+  TAIWAN
+  CHINA_MAINLAND
+  HONG_KONG
+  SINGAPORE
+  SOUTHEAST_ASIA
+  AUSTRALIA
+  OCEANIA
+  BRAZIL
+  SOUTH_AMERICA_WEST
+  SOUTH_AMERICA_EAST
+  MEXICO
+  CENTRAL_AMERICA
+  SOUTH_AFRICA
+  AFRICA_NORTH
+  AFRICA_WEST
+  AFRICA_EAST
+  MIDDLE_EAST
+  RUSSIA
+  // Add more as needed
+}
+
+enum TransactionType {
+  DEPOSIT
+  PAYOUT
+  TRANSFER
+}

@@ -1,0 +1,21 @@
+{
+  "name": "common",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./mail": "./mail.ts",
+    "./node-mail": "./node-mail.ts",
+    "./mail-util": "./mail-util.ts"
+  },
+  "dependencies": {
+    "tweetnacl": "^1.0.3",
+    "bs58": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

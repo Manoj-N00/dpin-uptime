@@ -1,0 +1,34 @@
+{
+  "name": "dpin-uptime",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "frontend": "turbo run dev --filter=frontend",
+    "hub": "turbo run dev --filter=hub",
+    "validator": "turbo run dev --filter=validator",
+    "poller": "turbo run dev --filter=poller",
+    "frontend:prod": "turbo run build --filter=frontend && cd apps/frontend && bunx --bun next start",
+    "db:generate": "cd packages/db && bun run generate && cd ../..",
+    "db:migrate": "cd packages/db && bun run migrate && cd ../..",
+    "db:push": "cd packages/db && bun run push && cd ../..",
+    "db:deploy": "cd packages/db && bun run deploy && cd ../..",
+    "db:studio": "cd packages/db && bun run studio && cd ../.."
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.7",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
