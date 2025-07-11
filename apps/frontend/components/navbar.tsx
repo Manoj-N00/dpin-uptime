@@ -1,4 +1,5 @@
 'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { MonitorCheck, Menu, X } from 'lucide-react';
@@ -13,6 +14,7 @@ import { getOrCreateDBUser } from '@/actions/auth';
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { appUser, signIn, signOut, isLoading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
@@ -22,7 +24,7 @@ export function Navbar() {
     router.prefetch('/payout');
     router.prefetch('/');
     router.prefetch('/validator');
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     async function getDBUser() {
@@ -38,7 +40,7 @@ export function Navbar() {
     if (el && section == '/') {
       el.scrollIntoView({ behavior: 'smooth' });
     } else if (el) {
-      const yOffset = -75; // adjust if you have a fixed header
+      const yOffset = -75;
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -58,7 +60,7 @@ export function Navbar() {
       if (pathname == section) {
         scrollToSection(section, id);
       } else {
-        router.push(`${section}`);
+        router.push(section as any);
         setTimeout(() => {
           scrollToSection(section, id);
         }, 800);
@@ -99,7 +101,13 @@ export function Navbar() {
     { label: 'Install DPIN', href: 'validator#install' },
   ];
 
-  const NavButton = ({ href, label }: { href: string; label: string }) => (
+  const NavButton = ({
+    href,
+    label,
+  }: {
+    href: string;
+    label: string;
+  }) => (
     <Button
       className="text-sm font-medium text-zinc-400 transition-colors hover:text-white cursor-pointer w-full md:w-auto justify-start md:justify-center"
       onClick={e => {
@@ -151,6 +159,7 @@ export function Navbar() {
           >
             Payout
           </Button>
+
           {/* Mobile Menu Button */}
           <Button
             className="md:hidden"
