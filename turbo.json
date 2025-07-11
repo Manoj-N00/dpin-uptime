@@ -1,43 +1,19 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": [
-    "DATABASE_URL",
-    "NODE_ENV",
-    "NEXT_PUBLIC_VERCEL_URL",
-    "VERCEL_URL"
-  ],
+  "globalEnv": ["DATABASE_URL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**",
-        "build/**"
-      ],
-      "env": ["NEXT_PUBLIC_*"],
-      "cache": true
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
     },
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"],
-      "cache": true
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
-      "cache": true
-    },
-    "lint": {
-      "outputs": [],
-      "cache": true
-    },
-    "clean": {
-      "cache": false
     }
   }
 }
