@@ -3,6 +3,11 @@ import { createCivicAuthPlugin } from '@civic/auth-web3/nextjs';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  poweredByHeader: false,
+  compress: true,
+  generateEtags: true,
+  reactStrictMode: true,
+  swcMinify: true,
   webpack: (config, { isServer }) => {
     // Prevent Webpack from trying to bundle `pino-pretty`
     config.resolve.fallback = {
