@@ -71,7 +71,7 @@ export default function ProfilePage({
       }
     }
     fetchBalance();
-  }, [address]);
+  }, [address, updateBalance]);
 
   useEffect(() => {
     const interval = setInterval(async () => {

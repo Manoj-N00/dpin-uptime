@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
   compress: true,
   generateEtags: true,
   reactStrictMode: true,
-  swcMinify: true,
   staticPageGenerationTimeout: 120,
   experimental: {
-    // @ts-expect-error: Next.js serverActions type definition is not yet stable
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'localhost:8000']
+    },
     typedRoutes: true
   },
   async headers() {
