@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 import { createCivicAuthPlugin } from '@civic/auth-web3/nextjs';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  distDir: '.next',
   poweredByHeader: false,
   compress: true,
   generateEtags: true,
@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   staticPageGenerationTimeout: 120,
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:8000']
+      allowedOrigins: ['localhost:3000', 'localhost:8000', 'dpin.vercel.app']
     },
     typedRoutes: true
   },
