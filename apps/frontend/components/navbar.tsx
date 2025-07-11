@@ -48,6 +48,7 @@ export function Navbar() {
 
   const handleNavScroll = useCallback(
     (sectionId: string) => (e: React.MouseEvent) => {
+      type ValidRoutes = '/' | '/validator' | '/payout' | '/dashboard';
       e.preventDefault();
       let [section, id] = sectionId.split('#');
       if (section == '') {
@@ -60,7 +61,7 @@ export function Navbar() {
       if (pathname == section) {
         scrollToSection(section, id);
       } else {
-        router.push(section as any);
+        router.push(section as ValidRoutes);
         setTimeout(() => {
           scrollToSection(section, id);
         }, 800);

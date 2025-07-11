@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   swcMinify: true,
   staticPageGenerationTimeout: 120,
   experimental: {
-    //@ts-ignore
+    // @ts-expect-error: Next.js serverActions type definition is not yet stable
     serverActions: true,
     typedRoutes: true
   },
