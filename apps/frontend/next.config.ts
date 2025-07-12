@@ -1,32 +1,8 @@
 import type { NextConfig } from 'next';
 import { createCivicAuthPlugin } from '@civic/auth-web3/nextjs';
-
+ 
 const nextConfig: NextConfig = {
-  distDir: '.next',
-  poweredByHeader: false,
-  compress: true,
-  generateEtags: true,
-  reactStrictMode: true,
-  staticPageGenerationTimeout: 120,
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:8000', 'dpin.vercel.app']
-    },
-    typedRoutes: true
-  },
-  async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,DELETE,PATCH,POST,PUT' },
-          { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version' },
-        ],
-      },
-    ];
-  },
+  /* config options here */
   webpack: (config, { isServer }) => {
     // Prevent Webpack from trying to bundle `pino-pretty`
     config.resolve.fallback = {
@@ -39,9 +15,9 @@ const nextConfig: NextConfig = {
 };
 
 const withCivicAuth = createCivicAuthPlugin({
-   clientId: `c6bc7d11-1503-4476-93ad-3ce1db8fa99d`,
-  //clientId: `${process.env.NEXT_PUBLIC_CIVIC_CLIENT_ID}`,
-  // include: ['/dashboard/*'],
+  // clientId: `771c8ce2-0f4a-4aa3-a14a-d91529afdddf`,
+  clientId: `${process.env.NEXT_PUBLIC_CIVIC_CLIENT_ID}`,
+  include: ['/dashboard/*'],
   // oauthServer is not necessary for production.
   oauthServer: process.env.AUTH_SERVER || 'https://auth.civic.com/oauth',
 });
