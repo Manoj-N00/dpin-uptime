@@ -3,11 +3,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { BaseUser } from '@/hooks/useAuth';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-
 interface HomeCTASectionProps {
   appUser: BaseUser | null;
-  router: AppRouterInstance;
+  router: { push: (path: string) => void };
   hanldeGettingStarted: () => void;
 }
 

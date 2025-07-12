@@ -52,13 +52,9 @@ export async function createTransactionRecord({
   const result = await getParsedTransferDetails(signature);
   if (!result.success) return result;
   const { transfers } = result.data!;
-  if (!transfers || transfers.length === 0) {
-    return { success: false, message: 'No transfer data found' };
-  }
-  const transfer = transfers[0];
-  const fromPubkey = transfer?.sender;
-  const toPubkey = transfer?.receiver;
-  const amount = transfer?.amount;
+  const fromPubkey = transfers[0].sender;
+  const toPubkey = transfers[0].receiver;
+  const amount = transfers[0].amount;
   if (!fromPubkey || !toPubkey)
     return { success: false, message: 'Transaction data is invalid' };
   let dbUser: User | null;

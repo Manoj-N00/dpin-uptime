@@ -8,12 +8,12 @@ export function Footer() {
             <br />
             Crafted with Care by{' '}
             <a
-              href="https://dev-manoj.in/"
+              href="https://itssvk.dev"
               target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-500 hover:text-zinc-400 transition-colors"
             >
-              Manoj
+              SVK
             </a>
           </p>
         </div>

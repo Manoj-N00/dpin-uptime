@@ -52,7 +52,7 @@ process.on('SIGTERM', async () => {
 
 // Start healthcheck HTTP server
 serve({
-  port: 8082,
+  port: 8080,
   fetch(req) {
     if (req.method === 'GET' && new URL(req.url).pathname === '/health') {
       return new Response(JSON.stringify({ healthy: isPollerHealthy }), {

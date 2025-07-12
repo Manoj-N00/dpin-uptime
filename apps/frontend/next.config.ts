@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 import { createCivicAuthPlugin } from '@civic/auth-web3/nextjs';
- 
+
 const nextConfig: NextConfig = {
   /* config options here */
   webpack: (config, { isServer }) => {
