@@ -13,7 +13,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-zinc-500 hover:text-zinc-400 transition-colors"
             >
-              SVK
+              Manoj
             </a>
           </p>
         </div>
