@@ -8,7 +8,7 @@ export function Footer() {
             <br />
             Crafted with Care by{' '}
             <a
-              href="https://itssvk.dev"
+              href="https://dev-manoj.in"
               target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-500 hover:text-zinc-400 transition-colors"
